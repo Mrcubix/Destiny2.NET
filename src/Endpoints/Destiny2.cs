@@ -15,6 +15,7 @@ namespace API.Endpoints
         private Settings settings;
         public static InvalidCredentialException InvalidAPIKeyException = new("The API Key provided is invalid");
         public static HttpRequestException requestProcessingErrorResponse = new("There was an issue processing the request.");
+        private ComponentResponse cachedComponentResponse = new();
 
         public Destiny2(Settings settings)
         {
@@ -49,6 +50,21 @@ namespace API.Endpoints
                 throw requestProcessingErrorResponse;
 
             return JsonSerializer.Deserialize<PlayerSearchResponse>(serializedResponse, serializerOptions);
+        }
+
+        public async Task<T> GetProfile<T>(int type, long id) where T : ComponentResponse
+        {
+            if (string.IsNullOrEmpty(settings.Key))
+                throw InvalidAPIKeyException;
+
+            cachedComponentResponse = new();
+
+            string serializedResponse = await SendRequest("GET", new Uri($"{baseUrl}/Destiny2/{type}/Profile/{id}/?components={cachedComponentResponse.Component}"));
+
+            if (serializedResponse == null)
+                throw requestProcessingErrorResponse;
+
+            return JsonSerializer.Deserialize<T>(serializedResponse, serializerOptions);
         }
         
         public async Task<string> SendRequest(string method, Uri url, object body = null)
