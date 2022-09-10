@@ -1,9 +1,11 @@
 using System.Security.Authentication;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using API.Entities.Request.User;
 using API.Entities.Response;
 using API.Entities.Response.Base;
+using API.Enums;
 
 namespace API.Endpoints
 {
@@ -31,7 +33,8 @@ namespace API.Endpoints
             }
 
             serializerOptions = new() {
-                PropertyNameCaseInsensitive = true
+                PropertyNameCaseInsensitive = true,
+                NumberHandling = JsonNumberHandling.AllowReadingFromString
             };
         }
 
@@ -65,6 +68,26 @@ namespace API.Endpoints
                 throw requestProcessingErrorResponse;
 
             return JsonSerializer.Deserialize<T>(serializedResponse, serializerOptions);
+        }
+
+        public async Task<DestinyProfileResponse> GetProfile(int type, long id, IEnumerable<DestinyComponentType> components)
+        {
+            if (string.IsNullOrEmpty(settings.Key))
+                throw InvalidAPIKeyException;
+
+            string serializedComponents = "";
+
+            foreach(DestinyComponentType component in components)
+            {
+                serializedComponents += $", {component}";
+            }
+
+            string serializedResponse = await SendRequest("GET", new Uri($"{baseUrl}/Destiny2/{type}/Profile/{id}/?components={serializedComponents}"));
+
+            if (serializedResponse == null)
+                throw requestProcessingErrorResponse;
+
+            return JsonSerializer.Deserialize<DestinyProfileResponse>(serializedResponse, serializerOptions);
         }
         
         public async Task<string> SendRequest(string method, Uri url, object body = null)
