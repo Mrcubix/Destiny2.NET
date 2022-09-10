@@ -4,7 +4,7 @@
 
 - [ ] GET: /Destiny2/Manifest/
 - [ ] GET: /Destiny2/Manifest/{entityType}/{hashIdentifier}/
-- [ ] POST: /Destiny2/SearchDestinyPlayerByBungieName/{membershipType}/
+- [x] POST: /Destiny2/SearchDestinyPlayerByBungieName/{membershipType}/
 - [ ] GET: /Destiny2/{membershipType}/Profile/{membershipId}/LinkedProfiles/
 - [ ] GET: /Destiny2/{membershipType}/Profile/{destinyMembershipId}/
 - [ ] GET: /Destiny2/{membershipType}/Profile/{destinyMembershipId}/Character/{characterId}/

@@ -1,3 +1,4 @@
+using System.Security.Authentication;
 using System.Text;
 using System.Text.Json;
 using API.Entities.Request.User;
@@ -12,6 +13,7 @@ namespace API.Endpoints
         private JsonSerializerOptions serializerOptions;
         private string baseUrl = "https://www.bungie.net/Platform";
         private Settings settings;
+        public static InvalidCredentialException InvalidAPIKeyException = new("The API Key provided is invalid");
         public static HttpRequestException requestProcessingErrorResponse = new("There was an issue processing the request.");
 
         public Destiny2(Settings settings)
@@ -34,6 +36,9 @@ namespace API.Endpoints
 
         public async Task<APIResponse> SearchDestinyPlayerByBungieName(string name, short tag)
         {
+            if (string.IsNullOrEmpty(settings.Key))
+                throw InvalidAPIKeyException;
+                
             ExactSearchRequest body = new();
             body.displayName = name;
             body.displayNameCode = tag;

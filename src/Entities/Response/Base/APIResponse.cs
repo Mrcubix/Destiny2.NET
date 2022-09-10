@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace API.Entities.Response.Base
 {
     public class APIResponse

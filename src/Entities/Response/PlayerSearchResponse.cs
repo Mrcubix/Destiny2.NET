@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using API.Entities.Response.Base;
 using API.Entities.User;
 
