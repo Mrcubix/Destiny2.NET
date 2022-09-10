@@ -1,6 +1,8 @@
 using System.Text;
 using System.Text.Json;
+using API.Entities.Request.User;
 using API.Entities.Response;
+using API.Entities.Response.Base;
 
 namespace API.Endpoints
 {
@@ -9,12 +11,39 @@ namespace API.Endpoints
         private HttpClient client = new();
         private JsonSerializerOptions serializerOptions;
         private string baseUrl = "https://www.bungie.net/Platform";
+        private Settings settings;
+        public static HttpRequestException requestProcessingErrorResponse = new("There was an issue processing the request.");
 
-        public Destiny2()
+        public Destiny2(Settings settings)
         {
+            this.settings = settings;
+
+            if (settings.Key == null)
+            {
+                Console.WriteLine("The API key in the provided settings was null");
+            }
+            else
+            {
+                client.DefaultRequestHeaders.Add("x-api-key", settings.Key);
+            }
+
             serializerOptions = new() {
                 PropertyNameCaseInsensitive = true
             };
+        }
+
+        public async Task<APIResponse> SearchDestinyPlayerByBungieName(string name, short tag)
+        {
+            ExactSearchRequest body = new();
+            body.displayName = name;
+            body.displayNameCode = tag;
+
+            string serializedResponse = await SendRequest("POST", new($"{baseUrl}/Destiny2/SearchDestinyPlayerByBungieName/all"), body);
+            
+            if (serializedResponse == null)
+                throw requestProcessingErrorResponse;
+
+            return JsonSerializer.Deserialize<PlayerSearchResponse>(serializedResponse, serializerOptions);
         }
         
         public async Task<string> SendRequest(string method, Uri url, object body = null)
