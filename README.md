@@ -1,4 +1,4 @@
-## Destiny 2 API
+## Destiny 2 Sharp
 
 This is an implementation of bungie's Destiny 2 API in C#
 This project is a WIP
