@@ -5,6 +5,7 @@ using System.Text.Json.Serialization;
 using API.Entities.Request.User;
 using API.Entities.Response;
 using API.Entities.Response.Base;
+using API.Entities.Response.Profile;
 using API.Enums;
 
 namespace API.Endpoints
@@ -12,12 +13,12 @@ namespace API.Endpoints
     public class Destiny2
     {
         private HttpClient client = new();
-        private JsonSerializerOptions serializerOptions;
-        private string baseUrl = "https://www.bungie.net/Platform";
-        private Settings settings;
-        public static InvalidCredentialException InvalidAPIKeyException = new("The API Key provided is invalid");
-        public static HttpRequestException requestProcessingErrorResponse = new("There was an issue processing the request.");
-        private ComponentResponse cachedComponentResponse = new();
+        public static string BaseUrl = "https://www.bungie.net/Platform";
+        public static InvalidCredentialException InvalidAPIKeyException { get; } = new("The API Key provided is invalid");
+        public static HttpRequestException requestProcessingErrorResponse { get; } = new("There was an issue processing the request.");
+        public JsonSerializerOptions SerializerOptions { get; set; }
+        public ComponentResponse cachedComponentResponse { get; set; } = new();
+        public Settings settings { get; }
 
         public Destiny2(Settings settings)
         {
@@ -32,7 +33,7 @@ namespace API.Endpoints
                 client.DefaultRequestHeaders.Add("x-api-key", settings.Key);
             }
 
-            serializerOptions = new() {
+            SerializerOptions = new() {
                 PropertyNameCaseInsensitive = true,
                 NumberHandling = JsonNumberHandling.AllowReadingFromString
             };
@@ -47,27 +48,27 @@ namespace API.Endpoints
             body.displayName = name;
             body.displayNameCode = tag;
 
-            string serializedResponse = await SendRequest("POST", new($"{baseUrl}/Destiny2/SearchDestinyPlayerByBungieName/all"), body);
+            string serializedResponse = await SendRequest("POST", new($"{BaseUrl}/Destiny2/SearchDestinyPlayerByBungieName/all"), body);
             
             if (serializedResponse == null)
                 throw requestProcessingErrorResponse;
 
-            return JsonSerializer.Deserialize<PlayerSearchResponse>(serializedResponse, serializerOptions);
+            return JsonSerializer.Deserialize<PlayerSearchResponse>(serializedResponse, SerializerOptions);
         }
 
-        public async Task<T> GetProfile<T>(int type, long id) where T : ComponentResponse
+        public async Task<T> GetProfile<T>(int type, long id) where T : ProfileComponentResponse
         {
             if (string.IsNullOrEmpty(settings.Key))
                 throw InvalidAPIKeyException;
 
             cachedComponentResponse = new();
 
-            string serializedResponse = await SendRequest("GET", new Uri($"{baseUrl}/Destiny2/{type}/Profile/{id}/?components={cachedComponentResponse.Component}"));
+            string serializedResponse = await SendRequest("GET", new Uri($"{BaseUrl}/Destiny2/{type}/Profile/{id}/?components={cachedComponentResponse.Component}"));
 
             if (serializedResponse == null)
                 throw requestProcessingErrorResponse;
 
-            return JsonSerializer.Deserialize<T>(serializedResponse, serializerOptions);
+            return JsonSerializer.Deserialize<T>(serializedResponse, SerializerOptions);
         }
 
         public async Task<DestinyProfileResponse> GetProfile(int type, long id, IEnumerable<DestinyComponentType> components)
@@ -82,12 +83,47 @@ namespace API.Endpoints
                 serializedComponents += $", {component}";
             }
 
-            string serializedResponse = await SendRequest("GET", new Uri($"{baseUrl}/Destiny2/{type}/Profile/{id}/?components={serializedComponents}"));
+            string serializedResponse = await SendRequest("GET", new Uri($"{BaseUrl}/Destiny2/{type}/Profile/{id}/?components={serializedComponents}"));
 
             if (serializedResponse == null)
                 throw requestProcessingErrorResponse;
 
-            return JsonSerializer.Deserialize<DestinyProfileResponse>(serializedResponse, serializerOptions);
+            return JsonSerializer.Deserialize<DestinyProfileResponse>(serializedResponse, SerializerOptions);
+        }
+
+        public async Task<T> GetCharacter<T>(int type, long id, long characterId) where T : CharacterComponentResponse
+        {
+            if (string.IsNullOrEmpty(settings.Key))
+                throw InvalidAPIKeyException;
+
+            cachedComponentResponse = new();
+
+            string serializedResponse = await SendRequest("GET", new Uri($"{BaseUrl}/Destiny2/{type}/Profile/{id}/Character/{characterId}/?components={cachedComponentResponse.Component}"));
+
+            if (serializedResponse == null)
+                throw requestProcessingErrorResponse;
+
+            return JsonSerializer.Deserialize<T>(serializedResponse, SerializerOptions);
+        }
+
+        public async Task<DestinyCharacterResponse> GetCharacter(int type, long id, long characterId, IEnumerable<DestinyComponentType> components)
+        {
+            if (string.IsNullOrEmpty(settings.Key))
+                throw InvalidAPIKeyException;
+
+            string serializedComponents = "";
+
+            foreach(DestinyComponentType component in components)
+            {
+                serializedComponents += $", {component}";
+            }
+
+            string serializedResponse = await SendRequest("GET", new Uri($"{BaseUrl}/Destiny2/{type}/Profile/{id}/Character/{characterId}/?components={serializedComponents}"));
+
+            if (serializedResponse == null)
+                throw requestProcessingErrorResponse;
+
+            return JsonSerializer.Deserialize<DestinyCharacterResponse>(serializedResponse, SerializerOptions);
         }
         
         public async Task<string> SendRequest(string method, Uri url, object body = null)
