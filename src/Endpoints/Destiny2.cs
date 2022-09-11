@@ -2,6 +2,7 @@ using System.Security.Authentication;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using API.Entities.HistoricalStats;
 using API.Entities.Request.User;
 using API.Entities.Response;
 using API.Entities.Response.Base;
@@ -124,6 +125,19 @@ namespace API.Endpoints
                 throw requestProcessingErrorResponse;
 
             return JsonSerializer.Deserialize<DestinyCharacterResponse>(serializedResponse, SerializerOptions);
+        }
+
+        public async Task<DestinyHistoricalStatsPeriodGroup[]> GetActivityHistory(int type, long id, string characterId, int count, int mode, int page)
+        {
+            string serializedResponse = await SendRequest("GET", new Uri($"{BaseUrl}/Destiny2/{type}/Account/{id}/Character/{characterId}/Stats/Activities/?count={count}&mode={mode}&page={page}"));
+
+            if (serializedResponse == null)
+            {
+                Console.WriteLine("There was an issue processing the request.");
+                Environment.Exit(11);
+            }
+
+            return JsonSerializer.Deserialize<DestinyActivityHistoryResults>(serializedResponse, SerializerOptions).Activities;
         }
         
         public async Task<string> SendRequest(string method, Uri url, object body = null)

@@ -2,6 +2,6 @@ namespace API.Entities.HistoricalStats
 {
     public class DestinyActivityHistoryResults
     {
-        public DestinyHistoricalStatsPeriodGroup[] activities;
+        public DestinyHistoricalStatsPeriodGroup[] Activities;
     }
 }
