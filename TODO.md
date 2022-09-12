@@ -6,8 +6,8 @@
 - [ ] GET: /Destiny2/Manifest/{entityType}/{hashIdentifier}/
 - [x] POST: /Destiny2/SearchDestinyPlayerByBungieName/{membershipType}/
 - [ ] GET: /Destiny2/{membershipType}/Profile/{membershipId}/LinkedProfiles/
-- [ ] GET: /Destiny2/{membershipType}/Profile/{destinyMembershipId}/
-- [ ] GET: /Destiny2/{membershipType}/Profile/{destinyMembershipId}/Character/{characterId}/
+- [x] GET: /Destiny2/{membershipType}/Profile/{destinyMembershipId}/
+- [x] GET: /Destiny2/{membershipType}/Profile/{destinyMembershipId}/Character/{characterId}/
 - [ ] GET: /Destiny2/Clan/{groupId}/WeeklyRewardState/
 - [ ] GET: /Destiny2/Clan/ClanBannerDictionary/
 - [ ] GET: /Destiny2/{membershipType}/Profile/{destinyMembershipId}/Item/{itemInstanceId}/
@@ -25,7 +25,7 @@
 - [ ] GET: /Destiny2/Armory/Search/{type}/{searchTerm}/
 - [ ] GET: /Destiny2/{membershipType}/Account/{destinyMembershipId}/Character/{characterId}/Stats/
 - [ ] GET: /Destiny2/{membershipType}/Account/{destinyMembershipId}/Stats/
-- [ ] GET: /Destiny2/{membershipType}/Account/{destinyMembershipId}/Character/{characterId}/Stats/Activities/
+- [x] GET: /Destiny2/{membershipType}/Account/{destinyMembershipId}/Character/{characterId}/Stats/Activities/
 - [ ] GET: /Destiny2/{membershipType}/Account/{destinyMembershipId}/Character/{characterId}/Stats/UniqueWeapons/
 - [ ] GET: /Destiny2/{membershipType}/Account/{destinyMembershipId}/Character/{characterId}/Stats/AggregateActivityStats/
 - [ ] GET: /Destiny2/Milestones/{milestoneHash}/Content/

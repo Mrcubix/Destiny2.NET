@@ -6,7 +6,6 @@ using API.Entities.HistoricalStats;
 using API.Entities.Request.User;
 using API.Entities.Response;
 using API.Entities.Response.Base;
-using API.Entities.Response.Profile;
 using API.Enums;
 
 namespace API.Endpoints
