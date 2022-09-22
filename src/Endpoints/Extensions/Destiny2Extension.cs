@@ -11,8 +11,6 @@ namespace API.Endpoints
             if (string.IsNullOrEmpty(api.settings.Key))
                 throw Destiny2.InvalidAPIKeyException;
 
-            api.cachedComponentResponse = new();
-
             string serializedResponse = await api.SendRequest("GET", new Uri($"{Destiny2.BaseUrl}/Destiny2/{type}/Profile/{id}/Character/{characterId}/?components={DestinyComponentType.CharacterActivities}"));
 
             if (serializedResponse == null)
