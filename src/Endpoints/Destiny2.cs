@@ -56,12 +56,12 @@ namespace API.Endpoints
             return JsonSerializer.Deserialize<PlayerSearchResponse>(serializedResponse, SerializerOptions);
         }
 
-        public async Task<T> GetProfile<T>(int type, long id) where T : ProfileComponentResponse
+        public async Task<T> GetProfile<T>(int type, long id) where T : ProfileComponentResponse, new()
         {
             if (string.IsNullOrEmpty(settings.Key))
                 throw InvalidAPIKeyException;
 
-            cachedComponentResponse = new();
+            cachedComponentResponse = new T();
 
             string serializedResponse = await SendRequest("GET", new Uri($"{BaseUrl}/Destiny2/{type}/Profile/{id}/?components={cachedComponentResponse.Component}"));
 
@@ -91,12 +91,12 @@ namespace API.Endpoints
             return JsonSerializer.Deserialize<DestinyProfileResponse>(serializedResponse, SerializerOptions);
         }
 
-        public async Task<T> GetCharacter<T>(int type, long id, long characterId) where T : CharacterComponentResponse
+        public async Task<T> GetCharacter<T>(int type, long id, long characterId) where T : CharacterComponentResponse, new()
         {
             if (string.IsNullOrEmpty(settings.Key))
                 throw InvalidAPIKeyException;
 
-            cachedComponentResponse = new();
+            cachedComponentResponse = new T();
 
             string serializedResponse = await SendRequest("GET", new Uri($"{BaseUrl}/Destiny2/{type}/Profile/{id}/Character/{characterId}/?components={cachedComponentResponse.Component}"));
 
