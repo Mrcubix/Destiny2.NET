@@ -18,9 +18,9 @@ namespace API.Endpoints
         public static HttpRequestException requestProcessingErrorResponse { get; } = new("There was an issue processing the request.");
         public JsonSerializerOptions SerializerOptions { get; set; }
         public ComponentResponse cachedComponentResponse { get; set; } = new();
-        public Settings settings { get; }
+        public APISettings settings { get; }
 
-        public Destiny2(Settings settings)
+        public Destiny2(APISettings settings)
         {
             this.settings = settings;
 

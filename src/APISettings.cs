@@ -1,6 +1,6 @@
 namespace API
 {
-    public class Settings
+    public class APISettings
     {
         public string Key { get; set; }
         public string Username { get; set; }
