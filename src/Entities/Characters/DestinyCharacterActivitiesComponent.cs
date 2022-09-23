@@ -1,5 +1,3 @@
-using API.Entities.Destiny;
-
 namespace API.Entities.Characters
 {
     public class DestinyCharacterActivitiesComponent

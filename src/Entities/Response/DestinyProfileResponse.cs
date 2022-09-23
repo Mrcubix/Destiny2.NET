@@ -25,11 +25,11 @@ namespace API.Entities.Response
         public SingleComponentResponseOf<object> ProfilePresentationNodes { get; set; }
         // TODO: Implement DestinyProfileRecordsComponent
         public SingleComponentResponseOf<object> ProfileRecords { get; set; }
-        // TODO: Implement DestinyProfileCollectiblesComponent
+        // TODO: Implement DestinyProfileCollectiblesComponent 
         public SingleComponentResponseOf<object> ProfileCollectibles { get; set; }
-        // TODO: Implement DestinyProfileTransitoryComponent
+        // TODO: Implement DestinyProfileTransitoryComponent 
         public SingleComponentResponseOf<object> ProfileTransitoryData { get; set; }
-        // TODO: Implement DestinyMetricsComponent
+        // TODO: Implement DestinyMetricsComponent 
         public SingleComponentResponseOf<object> Metrics { get; set; }
         // TODO: Implement DestinyStringVariablesComponent
         public SingleComponentResponseOf<object> ProfileStringVariables { get; set; }
@@ -38,15 +38,15 @@ namespace API.Entities.Response
         public SingleComponentResponseOf<Dictionary<long, object>> CharacterInventories { get; set; }
         // TODO: Implement DestinyCharacterProgressionComponent
         public SingleComponentResponseOf<Dictionary<long, object>> CharacterProgressions { get; set; }
-        // TODO: Implement DestinyCharacterRenderComponent
+        // TODO: Implement DestinyCharacterRenderComponent 
         public SingleComponentResponseOf<Dictionary<long, object>> CharacterRenderData { get; set; }
         // TODO: Implement DestinyCharacterActivitiesComponent
         public SingleComponentResponseOf<Dictionary<long, DestinyCharacterActivitiesComponent>> CharacterActivities { get; set; }
         // TODO: Implement DestinyInventoryComponent
         public SingleComponentResponseOf<Dictionary<long, object>> CharacterEquipment { get; set; }
-        // TODO: Implement DestinyKiosksComponent
+        // TODO: Implement DestinyKiosksComponent 
         public SingleComponentResponseOf<Dictionary<long, object>> CharacterKiosks { get; set; }
-        // TODO: Implement DestinyPlugSetsComponent
+        // TODO: Implement DestinyPlugSetsComponent 
         public SingleComponentResponseOf<Dictionary<long, object>> CharacterPlugSets { get; set; }
         // TODO: Implement DestinyBaseItemComponentSetOfuint32
         public Dictionary<long, object> CharacterUninstancedItemComponents { get; set; }

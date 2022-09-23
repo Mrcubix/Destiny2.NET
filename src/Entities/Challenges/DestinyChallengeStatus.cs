@@ -1,6 +1,6 @@
-using API.Entities.Destiny.Quests;
+using API.Entities.Quests;
 
-namespace API.Entities.Destiny.Challenges
+namespace API.Entities.Challenges
 {
     public class DestinyChallengeStatus
     {

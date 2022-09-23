@@ -1,6 +1,4 @@
 using API.Entities.Characters;
-using API.Entities.Components.Profiles;
-using API.Entities.Profiles;
 using API.Entities.Response.Base;
 
 namespace API.Entities.Response

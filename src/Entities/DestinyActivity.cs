@@ -1,6 +1,6 @@
-using API.Entities.Destiny.Challenges;
+using API.Entities.Challenges;
 
-namespace API.Entities.Destiny
+namespace API.Entities
 {
     public class DestinyActivity
     {

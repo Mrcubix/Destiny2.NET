@@ -1,4 +1,4 @@
-namespace API.Entities.Destiny.Quests
+namespace API.Entities.Quests
 {
     public class DestinyObjectiveProgress
     {

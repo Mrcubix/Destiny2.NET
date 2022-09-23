@@ -6,7 +6,8 @@ namespace API.Entities.Response.Profile
 {
     public class ProfileDestinyProfileResponse : ProfileComponentResponse
     {
-        public Dictionary<string, SingleComponentResponseOf<DestinyProfileComponent>> Response { get; set; }
-        new public DestinyComponentType Component { get; } = DestinyComponentType.Profiles;
+        public DestinyProfileResponse Response { get; set; }
+        public DestinyProfileComponent Profile => Response != null ? Response.Profile.Data : null;
+        new public DestinyComponentType Component => DestinyComponentType.Profiles;
     }
 }
