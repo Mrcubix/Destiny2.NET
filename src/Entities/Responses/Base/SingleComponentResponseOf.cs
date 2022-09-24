@@ -1,4 +1,4 @@
-namespace API.Entities.Response.Base
+namespace API.Entities.Responses.Base
 {
     public class SingleComponentResponseOf<T> 
     {

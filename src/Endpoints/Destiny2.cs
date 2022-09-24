@@ -4,8 +4,9 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using API.Entities.HistoricalStats;
 using API.Entities.Request.User;
-using API.Entities.Response;
-using API.Entities.Response.Base;
+using API.Entities.Responses;
+using API.Entities.Responses.Base;
+using API.Entities.User;
 using API.Enums;
 
 namespace API.Endpoints
@@ -17,7 +18,6 @@ namespace API.Endpoints
         public static InvalidCredentialException InvalidAPIKeyException { get; } = new("The API Key provided is invalid");
         public static HttpRequestException requestProcessingErrorResponse { get; } = new("There was an issue processing the request.");
         public JsonSerializerOptions SerializerOptions { get; set; }
-        public ComponentResponse cachedComponentResponse { get; set; } = new();
         public APISettings settings { get; }
 
         public Destiny2(APISettings settings)
@@ -39,7 +39,7 @@ namespace API.Endpoints
             };
         }
 
-        public async Task<APIResponse> SearchDestinyPlayerByBungieName(string name, short tag)
+        public async Task<List<UserInfoCard>> SearchDestinyPlayerByBungieName(string name, short tag)
         {
             if (string.IsNullOrEmpty(settings.Key))
                 throw InvalidAPIKeyException;
@@ -53,22 +53,20 @@ namespace API.Endpoints
             if (serializedResponse == null)
                 throw requestProcessingErrorResponse;
 
-            return JsonSerializer.Deserialize<PlayerSearchResponse>(serializedResponse, SerializerOptions);
+            return JsonSerializer.Deserialize<APIResponse<List<UserInfoCard>>>(serializedResponse, SerializerOptions).Response;
         }
 
-        public async Task<T> GetProfile<T>(int type, long id) where T : ProfileComponentResponse, new()
+        public async Task<DestinyProfileResponse> GetProfile(int type, long id, DestinyComponentType component)
         {
             if (string.IsNullOrEmpty(settings.Key))
                 throw InvalidAPIKeyException;
 
-            cachedComponentResponse = new T();
-
-            string serializedResponse = await SendRequest("GET", new Uri($"{BaseUrl}/Destiny2/{type}/Profile/{id}/?components={cachedComponentResponse.Component}"));
+            string serializedResponse = await SendRequest("GET", new Uri($"{BaseUrl}/Destiny2/{type}/Profile/{id}/?components={component}"));
 
             if (serializedResponse == null)
                 throw requestProcessingErrorResponse;
 
-            return JsonSerializer.Deserialize<T>(serializedResponse, SerializerOptions);
+            return JsonSerializer.Deserialize<APIResponse<DestinyProfileResponse>>(serializedResponse, SerializerOptions).Response;
         }
 
         public async Task<DestinyProfileResponse> GetProfile(int type, long id, IEnumerable<DestinyComponentType> components)
@@ -80,7 +78,7 @@ namespace API.Endpoints
 
             foreach(DestinyComponentType component in components)
             {
-                serializedComponents += $", {component}";
+                serializedComponents += serializedComponents == "" ? $"{component}" : $", {component}";
             }
 
             string serializedResponse = await SendRequest("GET", new Uri($"{BaseUrl}/Destiny2/{type}/Profile/{id}/?components={serializedComponents}"));
@@ -88,22 +86,20 @@ namespace API.Endpoints
             if (serializedResponse == null)
                 throw requestProcessingErrorResponse;
 
-            return JsonSerializer.Deserialize<DestinyProfileResponse>(serializedResponse, SerializerOptions);
+            return JsonSerializer.Deserialize<APIResponse<DestinyProfileResponse>>(serializedResponse, SerializerOptions).Response;
         }
 
-        public async Task<T> GetCharacter<T>(int type, long id, long characterId) where T : CharacterComponentResponse, new()
+        public async Task<DestinyCharacterResponse> GetCharacter(int type, long id, long characterId, DestinyComponentType component)
         {
             if (string.IsNullOrEmpty(settings.Key))
                 throw InvalidAPIKeyException;
 
-            cachedComponentResponse = new T();
-
-            string serializedResponse = await SendRequest("GET", new Uri($"{BaseUrl}/Destiny2/{type}/Profile/{id}/Character/{characterId}/?components={cachedComponentResponse.Component}"));
+            string serializedResponse = await SendRequest("GET", new Uri($"{BaseUrl}/Destiny2/{type}/Profile/{id}/Character/{characterId}/?components={component}"));
 
             if (serializedResponse == null)
                 throw requestProcessingErrorResponse;
 
-            return JsonSerializer.Deserialize<T>(serializedResponse, SerializerOptions);
+            return JsonSerializer.Deserialize<APIResponse<DestinyCharacterResponse>>(serializedResponse, SerializerOptions).Response;
         }
 
         public async Task<DestinyCharacterResponse> GetCharacter(int type, long id, long characterId, IEnumerable<DestinyComponentType> components)
@@ -123,7 +119,7 @@ namespace API.Endpoints
             if (serializedResponse == null)
                 throw requestProcessingErrorResponse;
 
-            return JsonSerializer.Deserialize<DestinyCharacterResponse>(serializedResponse, SerializerOptions);
+            return JsonSerializer.Deserialize<APIResponse<DestinyCharacterResponse>>(serializedResponse, SerializerOptions).Response;
         }
 
         public async Task<DestinyHistoricalStatsPeriodGroup[]> GetActivityHistory(int type, long id, string characterId, int count, int mode, int page)
@@ -136,7 +132,7 @@ namespace API.Endpoints
                 Environment.Exit(11);
             }
 
-            return JsonSerializer.Deserialize<DestinyActivityHistoryResults>(serializedResponse, SerializerOptions).Activities;
+            return JsonSerializer.Deserialize<APIResponse<DestinyActivityHistoryResults>>(serializedResponse, SerializerOptions).Response.Activities;
         }
         
         public async Task<string> SendRequest(string method, Uri url, object body = null)
@@ -206,25 +202,22 @@ namespace API.Endpoints
 
                             if (mediaType == "text/html")
                             {
-                                Console.WriteLine("Method doesn't exist or isn't allowed");
-                                return null;
+                                throw new NotImplementedException("Method doesn't exist or isn't allowed");
                             }
                             else if (mediaType == "application/json")
                             {
                                 var serializedResponse = await response.Content.ReadAsStringAsync();
-                                var apiResponse = JsonSerializer.Deserialize<DestinyErrorResponse>(serializedResponse);
+                                var apiResponse = JsonSerializer.Deserialize<APIResponse>(serializedResponse);
                                 Console.WriteLine(apiResponse.Message);
                             }
                             else
                             {
-                                Console.WriteLine($"Failed due to an unknown error (HTTP error code {statusCode})");
-                                return null;
+                                throw new HttpRequestException($"Failed due to an unknown error (HTTP error code {statusCode})");
                             }
                         }
                         else
                         {
-                            Console.WriteLine($"Failed due to an unknown error (HTTP error code {statusCode})");
-                            return null;
+                            throw new HttpRequestException($"Failed due to an unknown error (HTTP error code {statusCode})");
                         }
                     }
 
@@ -232,8 +225,7 @@ namespace API.Endpoints
                 }
             }
 
-            Console.WriteLine($"Failed after {retries} retries");
-            return null;
+            throw new HttpRequestException($"Failed after {retries} retries");
         }
     }
 }

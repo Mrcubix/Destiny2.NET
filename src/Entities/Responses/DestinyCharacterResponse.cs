@@ -1,7 +1,7 @@
 using API.Entities.Characters;
-using API.Entities.Response.Base;
+using API.Entities.Responses.Base;
 
-namespace API.Entities.Response
+namespace API.Entities.Responses
 {
     public class DestinyCharacterResponse
     {
