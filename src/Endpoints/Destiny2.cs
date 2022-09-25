@@ -34,7 +34,8 @@ namespace API.Endpoints
                 client.DefaultRequestHeaders.Add("x-api-key", settings.Key);
             }
 
-            SerializerOptions = new() {
+            SerializerOptions = new()
+            {
                 PropertyNameCaseInsensitive = true,
                 NumberHandling = JsonNumberHandling.AllowReadingFromString
             };
@@ -60,7 +61,7 @@ namespace API.Endpoints
             body.displayNameCode = tag;
 
             string serializedResponse = await SendRequest("POST", new($"{BaseUrl}/Destiny2/SearchDestinyPlayerByBungieName/all"), body);
-            
+
             if (serializedResponse == null)
                 throw requestProcessingErrorResponse;
 
@@ -87,7 +88,7 @@ namespace API.Endpoints
 
             string serializedComponents = "";
 
-            foreach(DestinyComponentType component in components)
+            foreach (DestinyComponentType component in components)
             {
                 serializedComponents += serializedComponents == "" ? $"{component}" : $", {component}";
             }
@@ -120,7 +121,7 @@ namespace API.Endpoints
 
             string serializedComponents = "";
 
-            foreach(DestinyComponentType component in components)
+            foreach (DestinyComponentType component in components)
             {
                 serializedComponents += $", {component}";
             }
@@ -145,7 +146,7 @@ namespace API.Endpoints
 
             return JsonSerializer.Deserialize<APIResponse<DestinyActivityHistoryResults>>(serializedResponse, SerializerOptions).Response.Activities;
         }
-        
+
         public async Task<string> SendRequest(string method, Uri url, object body = null)
         {
             HttpResponseMessage response = null;
@@ -153,7 +154,7 @@ namespace API.Endpoints
 
             short retries = 0;
 
-            while(retries++ < settings.MaxRetries - 1)
+            while (retries++ < settings.MaxRetries - 1)
             {
                 try
                 {
@@ -166,7 +167,7 @@ namespace API.Endpoints
                             request.Method = new("POST");
                             request.RequestUri = url;
                         }
-                        
+
                         response = await client.SendAsync(request);
                     }
                     else if (method.ToLower() == "get")
@@ -175,7 +176,7 @@ namespace API.Endpoints
                     }
 
                 }
-                catch(Exception E)
+                catch (Exception E)
                 {
                     Console.Clear();
                     Console.WriteLine("An Exception Occured: ");
@@ -191,52 +192,94 @@ namespace API.Endpoints
                 }
                 else
                 {
-                    Console.Clear();
-                    Console.Write("An Error Occured: ");
-
-                    int statusCode = (int)response.StatusCode;
-
-                    if (statusCode == 520)
-                    {
-                        Console.WriteLine("The API returned an unexpected result");
-                    }
-                    else if(statusCode == 522)
-                    {
-                        Console.WriteLine("The request timed out");
-                        Console.WriteLine("This may be be either due to a bad connection or the API is down");
-                    }
-                    else
-                    {
-                        if (response.Content.Headers.ContentType != null)
-                        {
-                            string mediaType = response.Content.Headers.ContentType.MediaType;
-
-                            if (mediaType == "text/html")
-                            {
-                                throw new NotImplementedException("Method doesn't exist or isn't allowed");
-                            }
-                            else if (mediaType == "application/json")
-                            {
-                                var serializedResponse = await response.Content.ReadAsStringAsync();
-                                var apiResponse = JsonSerializer.Deserialize<APIResponse>(serializedResponse);
-                                Console.WriteLine(apiResponse.Message);
-                            }
-                            else
-                            {
-                                throw new HttpRequestException($"Failed due to an unknown error (HTTP error code {statusCode})");
-                            }
-                        }
-                        else
-                        {
-                            throw new HttpRequestException($"Failed due to an unknown error (HTTP error code {statusCode})");
-                        }
-                    }
+                    await HandleError(response);
 
                     Console.WriteLine($"Now retrying... (Retry: {retries})");
                 }
             }
 
             throw new HttpRequestException($"Failed after {retries} retries");
+        }
+
+        public async Task<byte[]> SendRequest(Uri url)
+        {
+            HttpResponseMessage response = null;
+
+            short retries = 0;
+
+            while (retries++ < settings.MaxRetries - 1)
+            {
+                try
+                {
+                    response = await client.GetAsync(url);
+                }
+                catch (Exception E)
+                {
+                    Console.Clear();
+                    Console.WriteLine("An Exception Occured: ");
+                    Console.WriteLine(E.ToString());
+                    Console.WriteLine("Press Enter to continue...");
+                    Console.ReadKey();
+                    return null;
+                }
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return await response.Content.ReadAsByteArrayAsync();
+                }
+                else
+                {
+                    await HandleError(response);
+
+                    Console.WriteLine($"Now retrying... (Retry: {retries})");
+                }
+            }
+
+            throw new HttpRequestException($"Failed after {retries} retries");
+        }
+
+        public async Task HandleError(HttpResponseMessage response)
+        {
+            Console.Clear();
+            Console.Write("An Error Occured: ");
+
+            int statusCode = (int)response.StatusCode;
+
+            if (statusCode == 520)
+            {
+                Console.WriteLine("The API returned an unexpected result");
+            }
+            else if (statusCode == 522)
+            {
+                Console.WriteLine("The request timed out");
+                Console.WriteLine("This may be be either due to a bad connection or the API is down");
+            }
+            else
+            {
+                if (response.Content.Headers.ContentType != null)
+                {
+                    string mediaType = response.Content.Headers.ContentType.MediaType;
+
+                    if (mediaType == "text/html")
+                    {
+                        throw new NotImplementedException("Method doesn't exist or isn't allowed");
+                    }
+                    else if (mediaType == "application/json")
+                    {
+                        var serializedResponse = await response.Content.ReadAsStringAsync();
+                        var apiResponse = JsonSerializer.Deserialize<APIResponse>(serializedResponse);
+                        Console.WriteLine(apiResponse.Message);
+                    }
+                    else
+                    {
+                        throw new HttpRequestException($"Failed due to an unknown error (HTTP error code {statusCode})");
+                    }
+                }
+                else
+                {
+                    throw new HttpRequestException($"Failed due to an unknown error (HTTP error code {statusCode})");
+                }
+            }
         }
     }
 }
