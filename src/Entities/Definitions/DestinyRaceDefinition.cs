@@ -1,6 +1,4 @@
-using System.Collections.Generic;
-
-namespace API.Definitions
+namespace API.Entities.Definitions
 {
     public static class DestinyRaceDefinition
     {

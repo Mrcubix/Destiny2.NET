@@ -1,6 +1,6 @@
 namespace API.Entities.Definitions
 {
-    public class DestinyActivityMatchmakingBlockDefinition
+    public class DestinyActivityMatchmakingBlockDefinition : DestinyDefinition
     {
         public bool IsMatchmade { get; set; }
         public int MinParty { get; set; }

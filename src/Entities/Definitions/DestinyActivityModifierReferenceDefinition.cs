@@ -1,6 +1,6 @@
 namespace API.Entities.Definitions
 {
-    public class DestinyActivityModifierReferenceDefinition
+    public class DestinyActivityModifierReferenceDefinition : DestinyDefinition
     {
         // TODO: Implement function to map definition
         // Implement Destiny.Definitions.ActivityModifiers.DestinyActivityModifierDefinition

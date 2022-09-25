@@ -3,7 +3,7 @@ using Tracker.API.Constants;
 
 namespace API.Entities.Definitions
 {
-    public class DestinyActivityDefinition
+    public class DestinyActivityDefinition : DestinyDefinition
     {
         public DestinyDisplayPropertiesDefinition DisplayProperties { get; set; }
         public DestinyDisplayPropertiesDefinition OriginalDisplayProperties { get; set; }
@@ -34,8 +34,5 @@ namespace API.Entities.Definitions
         public bool IsPvP { get; set; }
         public DestinyActivityInsertionPointDefinition[] InsertionPoints { get; set; }
         public DestinyEnvironmentLocationMapping[] ActivityLocationMappings { get; set; }
-        public uint Hash { get; set; }
-        public int Index { get; set; }
-        public bool Redacted { get; set; }
     }
 }

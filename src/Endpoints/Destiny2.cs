@@ -2,6 +2,7 @@ using System.Security.Authentication;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using API.Entities.Config;
 using API.Entities.HistoricalStats;
 using API.Entities.Request.User;
 using API.Entities.Responses;
@@ -37,6 +38,16 @@ namespace API.Endpoints
                 PropertyNameCaseInsensitive = true,
                 NumberHandling = JsonNumberHandling.AllowReadingFromString
             };
+        }
+
+        public async Task<DestinyManifest> GetDestinyManifest()
+        {
+            string serializedResponse = await SendRequest("GET", new Uri($"{BaseUrl}/Destiny2/Manifest/"));
+
+            if (serializedResponse == null)
+                throw requestProcessingErrorResponse;
+
+            return JsonSerializer.Deserialize<APIResponse<DestinyManifest>>(serializedResponse, SerializerOptions).Response;
         }
 
         public async Task<List<UserInfoCard>> SearchDestinyPlayerByBungieName(string name, short tag)

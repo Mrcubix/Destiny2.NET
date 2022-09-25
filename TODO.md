@@ -2,7 +2,7 @@
 
 # Requests
 
-- [ ] GET: /Destiny2/Manifest/
+- [x] GET: /Destiny2/Manifest/
 - [ ] GET: /Destiny2/Manifest/{entityType}/{hashIdentifier}/
 - [x] POST: /Destiny2/SearchDestinyPlayerByBungieName/{membershipType}/
 - [ ] GET: /Destiny2/{membershipType}/Profile/{membershipId}/LinkedProfiles/
