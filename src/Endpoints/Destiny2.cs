@@ -240,7 +240,6 @@ namespace API.Endpoints
 
         public async Task HandleError(HttpResponseMessage response)
         {
-            Console.Clear();
             Console.Write("An Error Occured: ");
 
             int statusCode = (int)response.StatusCode;
