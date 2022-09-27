@@ -14,7 +14,7 @@ namespace API.Entities.Responses.Base
         public int ThrottleSeconds { get; set; }
     }
 
-    public abstract class APIResponse<T> : APIResponse
+    public class APIResponse<T> : APIResponse
     {
         public T Response { get; set; }
     }
