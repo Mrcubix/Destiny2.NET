@@ -1,5 +1,7 @@
 using System.Text.Json;
 using API.Entities.Characters;
+using API.Entities.Responses;
+using API.Entities.Responses.Base;
 using API.Enums;
 
 namespace API.Endpoints
@@ -16,7 +18,7 @@ namespace API.Endpoints
             if (serializedResponse == null)
                 throw Destiny2.requestProcessingErrorResponse;
 
-            return JsonSerializer.Deserialize<DestinyCharacterActivitiesComponent>(serializedResponse, api.SerializerOptions);
+            return JsonSerializer.Deserialize<APIResponse<DestinyCharacterResponse>>(serializedResponse, api.SerializerOptions).Response.Activities.Data;
         }
     }
 }
