@@ -6,7 +6,7 @@ namespace API.Entities.Definitions
     {
         public int ClassType { get; set; }
         public DestinyDisplayPropertiesDefinition DisplayProperties { get; set; }
-        public Dictionary<int, string> GenderedClassNames { get; set; }
+        public Dictionary<string, string> GenderedClassNames { get; set; }
         public Dictionary<uint, string> GenderedClassNamesByGenderHash { get; set; }
         public uint? MentorVendorHash { get; set; }
     }
