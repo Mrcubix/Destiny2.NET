@@ -1,13 +1,15 @@
+using API.Entities.Definitions.Common;
+
 namespace API.Entities.Definitions
 {
-    public static class DestinyRaceDefinition
+    public class DestinyRaceDefinition
     {
-        public static Dictionary<int, string> RaceTable { get; set; } = new()
-        {
-            [0] = "Human",
-            [1] = "Awoken",
-            [2] = "Exo",
-            [3] = "Unknown"
-        };
+        public int RaceType { get; set; }
+        public DestinyDisplayPropertiesDefinition DisplayProperties { get; set; }
+        public Dictionary<int, string> GenderedRaceNames { get; set; }
+        public Dictionary<uint, string> GenderedRaceNamesByGenderHash { get; set; }
+        public uint Hash { get; set; }
+        public int Index { get; set; }
+        public bool Redacted { get; set; }
     }
 }
