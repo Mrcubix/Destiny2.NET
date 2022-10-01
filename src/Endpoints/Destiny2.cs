@@ -25,9 +25,9 @@ namespace API.Endpoints
         {
             this.settings = settings;
 
-            if (settings.Key == null)
+            if (string.IsNullOrEmpty(settings.Key))
             {
-                Console.WriteLine("The API key in the provided settings was null");
+                Console.WriteLine("API Key is not set, please set it in the settings.");
             }
             else
             {
@@ -38,6 +38,12 @@ namespace API.Endpoints
             {
                 PropertyNameCaseInsensitive = true,
                 NumberHandling = JsonNumberHandling.AllowReadingFromString
+            };
+
+            settings.OnKeyChanged += (sender, key) =>
+            {
+                client.DefaultRequestHeaders.Remove("x-api-key");
+                client.DefaultRequestHeaders.Add("x-api-key", key);
             };
         }
 
@@ -266,7 +272,7 @@ namespace API.Endpoints
                     else if (mediaType == "application/json")
                     {
                         var serializedResponse = await response.Content.ReadAsStringAsync();
-                        var apiResponse = JsonSerializer.Deserialize<APIResponse>(serializedResponse);
+                        var apiResponse = JsonSerializer.Deserialize<APIResponse<DestinyErrorResponse>>(serializedResponse);
                         Console.WriteLine(apiResponse.Message);
                     }
                     else
