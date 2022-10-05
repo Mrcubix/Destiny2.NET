@@ -182,17 +182,12 @@ namespace API.Endpoints
                     }
 
                 }
-                catch (Exception E)
+                catch (Exception)
                 {
-                    Console.Clear();
-                    Console.WriteLine("An Exception Occured: ");
-                    Console.WriteLine(E.ToString());
-                    Console.WriteLine("Press Enter to continue...");
-                    Console.ReadKey();
-                    return null;
+                    Console.WriteLine("An exception occured while processing the request, This may be due because you're not connected to the internet.");
                 }
 
-                if (response.IsSuccessStatusCode)
+                if (response != null && response.IsSuccessStatusCode)
                 {
                     return await response.Content.ReadAsStringAsync();
                 }
@@ -219,17 +214,12 @@ namespace API.Endpoints
                 {
                     response = await client.GetAsync(url);
                 }
-                catch (Exception E)
+                catch (Exception)
                 {
-                    Console.Clear();
-                    Console.WriteLine("An Exception Occured: ");
-                    Console.WriteLine(E.ToString());
-                    Console.WriteLine("Press Enter to continue...");
-                    Console.ReadKey();
-                    return null;
+                    Console.WriteLine("An exception occured while processing the request, This may be due because you're not connected to the internet.");
                 }
 
-                if (response.IsSuccessStatusCode)
+                if (response != null && response.IsSuccessStatusCode)
                 {
                     return await response.Content.ReadAsByteArrayAsync();
                 }
