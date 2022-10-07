@@ -16,6 +16,6 @@ namespace API
         }
         public string Username { get; set; }
         public short Tag { get; set; }
-        public short MaxRetries { get; set; }
+        public short MaxRetries { get; set; } = 3;
     }
 }
