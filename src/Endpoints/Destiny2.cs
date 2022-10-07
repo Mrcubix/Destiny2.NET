@@ -238,6 +238,9 @@ namespace API.Endpoints
         {
             Console.Write("An Error Occured: ");
 
+            if (response == null)
+                return;
+
             int statusCode = (int)response.StatusCode;
 
             if (statusCode == 520)
