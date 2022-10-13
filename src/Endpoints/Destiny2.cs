@@ -20,7 +20,6 @@ namespace API.Endpoints
         public static HttpRequestException requestProcessingErrorResponse { get; } = new("There was an issue processing the request.");
         public JsonSerializerOptions SerializerOptions { get; set; }
         public APISettings settings { get; }
-        private APIResponse cachedResponse;
 
         public Destiny2(APISettings settings)
         {
