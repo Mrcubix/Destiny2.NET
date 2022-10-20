@@ -1,6 +1,6 @@
 namespace API.Entities.Definitions
 {
-    public class DestinyActivityPlaylistItemDefinition : DestinyDefinition
+    public class DestinyActivityPlaylistItemDefinition
     {
         public uint ActivityHash { get; set; }
         // TODO: Map hash to Destiny.Definitions.DestinyActivityModeDefinition

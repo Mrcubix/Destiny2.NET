@@ -1,6 +1,6 @@
 namespace API.Entities.Definitions
 {
-    public class DestinyActivityLoadoutRequirement : DestinyDefinition
+    public class DestinyActivityLoadoutRequirement
     {
         public uint EquipmentSlotHash { get; set; }
         public uint[] AllowedEquippedItemHashes { get; set; }

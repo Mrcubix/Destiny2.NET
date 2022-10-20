@@ -1,6 +1,6 @@
 namespace API.Entities.Definitions
 {
-    public class DestinyActivityLoadoutRequirementSet : DestinyDefinition
+    public class DestinyActivityLoadoutRequirementSet
     {
         public DestinyActivityLoadoutRequirement[] Requirements { get; set; }
     }

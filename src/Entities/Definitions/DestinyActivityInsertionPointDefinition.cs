@@ -1,6 +1,6 @@
 namespace API.Entities.Definitions
 {
-    public class DestinyActivityInsertionPointDefinition : DestinyDefinition
+    public class DestinyActivityInsertionPointDefinition
     {
         public uint phaseHash { get; set; }
     }

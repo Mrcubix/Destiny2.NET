@@ -1,6 +1,6 @@
 namespace API.Entities.Definitions
 {
-    public class DestinyActivityGuidedBlockDefinition : DestinyDefinition
+    public class DestinyActivityGuidedBlockDefinition
     {
         public int GuidedMaxLobbySize { get; set; }
         public int GuidedMinLobbySize { get; set; }
