@@ -6,7 +6,7 @@ namespace API.Entities.Characters
     {
         public long MembershipId { get; set; }
         public int MembershipType { get; set; }
-        public long _characterId { get; set; }
+        public long CharacterId { get; set; }
         public DateTime DateLastPlayed { get; set; }
         public long MinutesPlayedThisSession { get; set; }
         public long MinutesPlayedTotal { get; set;}

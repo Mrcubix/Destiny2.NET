@@ -8,7 +8,7 @@ namespace API.Entities.User
         public int[] ApplicableMembershipTypes { get; set; }
         public bool IsPublic { get; set; }
         public int MembershipType { get; set; }
-        private long _membershipId;
+        public long MembershipId { get; set; }
         public string DisplayName { get; set; }
         public string BungieGlobalDisplayName { get; set; }
         public short BungieGlobalDisplayNameCode { get; set; }
