@@ -140,7 +140,7 @@ namespace API.Endpoints
             return JsonSerializer.Deserialize<APIResponse<DestinyCharacterResponse>>(serializedResponse, SerializerOptions).Response;
         }
 
-        public async Task<DestinyHistoricalStatsPeriodGroup[]> GetActivityHistory(int type, long id, string characterId, int count, int mode, int page)
+        public async Task<DestinyHistoricalStatsPeriodGroup[]> GetActivityHistory(int type, long id, long characterId, int count, int mode, int page)
         {
             string serializedResponse = await SendRequest("GET", new Uri($"{BaseUrl}/Destiny2/{type}/Account/{id}/Character/{characterId}/Stats/Activities/?count={count}&mode={mode}&page={page}"));
 

@@ -4,44 +4,12 @@ namespace API.Entities.Characters
 {
     public class DestinyCharacterComponent
     {
-        private long _membershipId;
-        public string MembershipId
-        {
-            get => _membershipId.ToString();
-            set
-            {
-                long.TryParse(value, out _membershipId);
-            }
-        }
+        public long MembershipId { get; set; }
         public int MembershipType { get; set; }
-        private long _characterId;
-        public string CharacterId
-        {
-            get => _characterId.ToString();
-            set
-            {
-                long.TryParse(value, out _characterId);
-            }
-        }
+        public long _characterId { get; set; }
         public DateTime DateLastPlayed { get; set; }
-        private long _minutesPlayedThisSession;
-        public string MinutesPlayedThisSession
-        {
-            get => _minutesPlayedThisSession.ToString();
-            set
-            {
-                long.TryParse(value, out _minutesPlayedThisSession);
-            }
-        }
-        private long _minutesPlayedTotal;
-        public string MinutesPlayedTotal
-        {
-            get => _minutesPlayedTotal.ToString();
-            set
-            {
-                long.TryParse(value, out _minutesPlayedTotal);
-            }
-        }
+        public long MinutesPlayedThisSession { get; set; }
+        public long MinutesPlayedTotal { get; set;}
         public int Light { get; set; }
         public Dictionary<uint, int> Stats { get; set; }
         public uint RaceHash { get; set; }
@@ -58,45 +26,5 @@ namespace API.Entities.Characters
         public int BaseCharacterLevel { get; set; }
         public float PercentToNextLevel { get; set; }
         public uint? TitleRecordHash { get; set; }
-
-        public long GetMembershipId()
-        {
-            return _membershipId;
-        }
-
-        public void SetMembershipId(long id)
-        {
-            this.MembershipId = id.ToString();
-        }
-
-        public long GetCharacterId()
-        {
-            return _characterId;
-        }
-
-        public void SetCharacterId(long id)
-        {
-            this.CharacterId = id.ToString();
-        }
-
-        public long GetMinutesPlayedThisSession()
-        {
-            return _minutesPlayedThisSession;
-        }
-
-        public void SetMinutesPlayedThisSession(long time)
-        {
-            this.MinutesPlayedThisSession = time.ToString();
-        }
-
-        public long GetMinutesPlayedTotal()
-        {
-            return _minutesPlayedTotal;
-        }
-
-        public void SetMinutesPlayedTotal(long time)
-        {
-            this.MinutesPlayedTotal = time.ToString();
-        }
     }
 }
